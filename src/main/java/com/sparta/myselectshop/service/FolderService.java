@@ -35,6 +35,7 @@ public class FolderService {
         
     }
 
+    //user의 폴더 전체 조회
     public List<FolderResponseDto> getFolders(User user) {
         List<Folder> folderList = folderRepository.findAllByUser(user);
         List<FolderResponseDto> responseDtoList = new ArrayList<>();
