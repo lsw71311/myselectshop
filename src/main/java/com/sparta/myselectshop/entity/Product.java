@@ -34,11 +34,16 @@ public class Product extends Timestamped {
     @Column(nullable = false)
     private int myprice;
 
-    public Product(ProductRequestDto requestDto) {
+    @ManyToOne(fetch = FetchType.LAZY) //product조회할때마다 use를 조회해야하는 것은 아니기에 디폴트가 아닌 lazy로 설정해서 필요할때만 조회해옴
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
+
+    public Product(ProductRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.image = requestDto.getImage();
         this.link = requestDto.getLink();
         this.lprice = requestDto.getLprice();
+        this.user = user;
     }
 
     public void update(ProductMypriceRequestDto requestDto) {
