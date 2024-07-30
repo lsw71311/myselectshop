@@ -105,6 +105,24 @@ public class ProductService {
         productFolderRepository.save(new ProductFolder(product, folder));  //엔티티클래스 객체 하나가 db에서 한줄이 된다.
     }
 
+    //각 폴더에 담긴 관심상품 조회
+    public Page<ProductResponseDto> getProductsInFolder(Long folderId, int page, int size, String sortBy, boolean isAsc, User user) {
+        //페이징 처리
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;    //오름, 내림차순 정렬 방향 결정
+        Sort sort = Sort.by(direction, sortBy); //정렬의 기준이 될 컬럼(sortby)과 방향을 정의
+        Pageable pageable = PageRequest.of(page, size, sort); // 페이지네이션과 정렬을 함께 처리할 수 있는 객체
+
+        Page<Product> productList = productRepository.findAllByUserAndProductFolderList_FolderId(user, folderId, pageable);
+
+        Page<ProductResponseDto> responseDtoList = productList.map(ProductResponseDto::new);
+
+        return responseDtoList;
+    }
+
+
+
+
+
     //admin 계정이면 모든 회원의 모든 관심 상품 조회
 //    public List<ProductResponseDto> getAllProducts() {
 //        List<Product> productList = productRepository.findAll();
