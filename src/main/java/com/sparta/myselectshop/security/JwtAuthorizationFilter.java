@@ -32,12 +32,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
         String tokenValue = jwtUtil.getJwtFromHeader(req);
-
+        // 토큰이 존재하는지 확인
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
-                return;
+                return; // 토큰이 유효하지 않으면 요청 처리 x, 필터 건너뛰도록
             }
 
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
